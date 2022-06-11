@@ -21,7 +21,7 @@ class DatabaseHelper(context: Context) :
      */
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE $TABLE_NAME (ID INTEGER PRIMARY KEY " +
-                "AUTOINCREMENT,NAME TEXT,GALAXY TEXT,TYPE TEXT)")
+                "AUTOINCREMENT,NAME TEXT,SURNAME TEXT,AGE TEXT)")
     }
 
     /**
@@ -95,12 +95,12 @@ class DatabaseHelper(context: Context) :
      * class.
      */
     companion object {
-        val DATABASE_NAME = "stars.db"
-        val TABLE_NAME = "star_table"
+        val DATABASE_NAME = "students.db"
+        val TABLE_NAME = "student_table"
         val COL_1 = "ID"
         val COL_2 = "NAME"
-        val COL_3 = "GALAXY"
-        val COL_4 = "TYPE"
+        val COL_3 = "SURNAME"
+        val COL_4 = "AGE"
     }
 }
 //end

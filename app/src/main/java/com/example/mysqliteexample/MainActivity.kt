@@ -124,8 +124,8 @@ class MainActivity : AppCompatActivity() {
                 while (res.moveToNext()) {
                     buffer.append("ID :" + res.getString(0) + "\n")
                     buffer.append("NAME :" + res.getString(1) + "\n")
-                    buffer.append("GALAXY :" + res.getString(2) + "\n")
-                    buffer.append("TYPE :" + res.getString(3) + "\n\n")
+                    buffer.append("SURNAME :" + res.getString(2) + "\n")
+                    buffer.append("AGE :" + res.getString(3) + "\n\n")
                 }
                 showDialog("Data Listing", buffer.toString())
             }
@@ -145,8 +145,8 @@ class MainActivity : AppCompatActivity() {
                 while (res.moveToNext()) {
                     buffer.append("ID :" + res.getString(0) + "\n")
                     buffer.append("NAME :" + res.getString(1) + "\n")
-                    buffer.append("GALAXY :" + res.getString(2) + "\n")
-                    buffer.append("TYPE :" + res.getString(3) + "\n\n")
+                    buffer.append("SURNAME :" + res.getString(2) + "\n")
+                    buffer.append("AGE :" + res.getString(3) + "\n\n")
                 }
                 showDialog("Dato", buffer.toString())
             }
