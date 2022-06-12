@@ -1,18 +1,40 @@
 package com.example.mysqliteexample
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
 import android.database.Cursor
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener {
 
     //In Kotlin `var` is used to declare a mutable variable. On the other hand
     //`internal` means a variable is visible within a given module.
     internal var dbHelper = DatabaseHelper(this)
+    var studentsA: StudentsA = StudentsA.instance
+
+    lateinit var lista: RecyclerView
+    lateinit var adaptador:StudentAdapter
+    lateinit var student: StudentModel
+    var archived = ArrayList<StudentModel>()
+    var position: Int = 0
 
     /**
      * Let's create a function to show Toast message
@@ -49,11 +71,109 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val searchIcon = findViewById<ImageView>(R.id.search_mag_icon)
+        searchIcon.setColorFilter(Color.BLACK)
+
+        val cancelIcon = findViewById<ImageView>(R.id.search_close_btn)
+        cancelIcon.setColorFilter(Color.BLACK)
+
+
+        val textView = findViewById<TextView>(R.id.search_src_text)
+        textView.setTextColor(Color.BLACK)
+
+        lista = findViewById(R.id.lista)
+        lista.layoutManager = LinearLayoutManager(lista.context)
+        lista.setHasFixedSize(true)
+
+        findViewById<SearchView>(R.id.person_search).setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adaptador.filter.filter(newText)
+                return false
+            }
+        })
+        getListOfStudents()
+
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                val fromPosition: Int = viewHolder.adapterPosition
+                val toPosition: Int = target.adapterPosition
+
+
+                Collections.swap(studentsA.getStudents(), fromPosition, toPosition)
+
+                lista.adapter?.notifyItemMoved(fromPosition, toPosition)
+
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                position = viewHolder.adapterPosition
+
+                if(direction == ItemTouchHelper.LEFT){
+                    student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
+                    studentsA.deleteStudent(position)
+                    lista.adapter?.notifyItemRemoved(position)
+
+                    Snackbar.make(lista, student.Name + " has been deleted.", Snackbar.LENGTH_LONG).setAction("Undo") {
+                        studentsA.getStudents().add(position, student)
+                        lista.adapter?.notifyItemInserted(position)
+                    }.show()
+                    adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+                    lista.adapter = adaptador
+                }else{
+
+                    position = viewHolder.adapterPosition
+                    student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
+                    archived.add(student)
+
+
+
+                   // val i= Intent(this@CrudPersonas, ModificarExample::class.java)
+                    //  i.putExtra("puser", personas.getPersonas()[position].user)
+                    //  i.putExtra("ppass", personas.getPersonas()[position].password)
+                    //  i.putExtra("pname", personas.getPersonas()[position].nombre)
+                    //  i.putExtra("poss", position)
+                    //  startActivity(i)
+
+
+
+
+                    Snackbar.make(lista, student.Name + " has been modified.", Snackbar.LENGTH_LONG).setAction("Undo") {
+                        archived.removeAt(archived.lastIndexOf(student))
+                        studentsA.getStudents().add(position, student)
+                        lista.adapter?.notifyItemInserted(position)
+                    }.show()
+                    adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+                    lista.adapter = adaptador
+
+
+                }}
+            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+
+                //RecyclerViewSwipeDecorator.Builder(this@MainActivity, c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                //    .addSwipeLeftBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.red))
+                //    .addSwipeLeftActionIcon(R.drawable.ic_baseline_delete_24)
+                //    .addSwipeRightBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.green))
+                //    .addSwipeRightActionIcon(R.drawable.ic_baseline_edit_24)
+                    //   .create()
+                //    .decorate()
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(lista)
+
+
         handleInserts()
         handleUpdates()
         handleDeletes()
-        handleViewing()
-        handleSearch()
+
     }
 
     /**
@@ -62,7 +182,15 @@ class MainActivity : AppCompatActivity() {
     fun handleInserts() {
         insertBtn.setOnClickListener {
             try {
-                dbHelper.insertData(nameTxt.text.toString(),galaxyTxt.text.toString(),
+                student = StudentModel(idTxt.text.toString(),nameTxt.text.toString(),galaxyTxt.text.toString(),
+                    typeTxt.text.toString())
+                studentsA.addStudent(student)
+                archived.add(student)
+                lista.adapter?.notifyDataSetChanged()
+                adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+                lista.adapter = adaptador
+
+                dbHelper.insertData(idTxt.text.toString(),nameTxt.text.toString(),galaxyTxt.text.toString(),
                     typeTxt.text.toString())
                 clearEditTexts()
             }catch (e: Exception){
@@ -82,14 +210,24 @@ class MainActivity : AppCompatActivity() {
                     nameTxt.text.toString(),
                     galaxyTxt.text.toString(),
                     typeTxt.text.toString())
-                if (isUpdate == true)
-                    showToast("Data Updated Successfully")
-                else
-                    showToast("Data Not Updated")
+
             }catch (e: Exception){
                 e.printStackTrace()
                 showToast(e.message.toString())
             }
+
+             student = StudentModel(studentsA.getStudents()[position].ID,nameTxt.text.toString(),galaxyTxt.text.toString(),
+                typeTxt.text.toString())
+
+            studentsA.editStudent(student, position)
+            Snackbar.make(lista, student.Name + " has been modified.", Snackbar.LENGTH_LONG).setAction("Undo") {
+                archived.removeAt(archived.lastIndexOf(student))
+                studentsA.getStudents().add(position, student)
+                lista.adapter?.notifyItemInserted(position)
+            }.show()
+            adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+            lista.adapter = adaptador
+            clearEditTexts()
         }
     }
 
@@ -98,58 +236,84 @@ class MainActivity : AppCompatActivity() {
      */
     fun handleDeletes(){
         deleteBtn.setOnClickListener {
+
+
             try {
+
                 dbHelper.deleteData(idTxt.text.toString())
+
                 clearEditTexts()
             }catch (e: Exception){
                 e.printStackTrace()
                 showToast(e.message.toString())
             }
+            student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
+            studentsA.deleteStudent(position)
+            lista.adapter?.notifyItemRemoved(position)
+
+            Snackbar.make(lista, student.Name + " has been deleted.", Snackbar.LENGTH_LONG).setAction("Undo") {
+                studentsA.getStudents().add(position, student)
+                lista.adapter?.notifyItemInserted(position)
+            }.show()
+            adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+            lista.adapter = adaptador
         }
     }
 
     /**
      * When our View All is clicked
      */
-    fun handleViewing() {
-        viewBtn.setOnClickListener(
-            View.OnClickListener {
-                val res = dbHelper.allData
-                if (res.count == 0) {
-                    showDialog("Error", "No Data Found")
-                    return@OnClickListener
-                }
 
-                val buffer = StringBuffer()
-                while (res.moveToNext()) {
-                    buffer.append("ID :" + res.getString(0) + "\n")
-                    buffer.append("NAME :" + res.getString(1) + "\n")
-                    buffer.append("SURNAME :" + res.getString(2) + "\n")
-                    buffer.append("AGE :" + res.getString(3) + "\n\n")
-                }
-                showDialog("Data Listing", buffer.toString())
-            }
-        )
-    }
 
 
     fun handleSearch()  {
-        btnSearch.setOnClickListener(
-            View.OnClickListener {
-                val res = dbHelper.searchData(idTxt.text.toString())
-                if (res.count == 0) {
-                    showDialog("Error", "No Data Found")
-                    return@OnClickListener
-                }
-                val buffer = StringBuffer()
-                while (res.moveToNext()) {
-                    buffer.append("ID :" + res.getString(0) + "\n")
-                    buffer.append("NAME :" + res.getString(1) + "\n")
-                    buffer.append("SURNAME :" + res.getString(2) + "\n")
-                    buffer.append("AGE :" + res.getString(3) + "\n\n")
-                }
-                showDialog("Dato", buffer.toString())
-            }
-        )
+       // btnSearch.setOnClickListener(
+        //     View.OnClickListener {
+        //         val res = dbHelper.searchData(idTxt.text.toString())
+        //        if (res.count == 0) {
+        //           showDialog("Error", "No Data Found")
+        //            return@OnClickListener
+        //       }
+        //       val buffer = StringBuffer()
+        //      while (res.moveToNext()) {
+                    //             buffer.append("ID :" + res.getString(0) + "\n")
+        //           buffer.append("NAME :" + res.getString(1) + "\n")
+        //          buffer.append("SURNAME :" + res.getString(2) + "\n")
+        //           //             buffer.append("AGE :" + res.getString(3) + "\n\n")
+        //          //         }
+        //       showDialog("Dato", buffer.toString())
+        //     }
+    //  )
     }
+    private fun getListOfStudents() {
+        val res = dbHelper.allData
+        if (res.count == 0) {
+            showDialog("Error", "No Data Found")
+        }
+
+        //val buffer = StringBuffer()
+        while (res.moveToNext()) {
+           // buffer.append("ID :" + res.getString(0) + "\n")
+            // buffer.append("NAME :" + res.getString(1) + "\n")
+            // buffer.append("SURNAME :" + res.getString(2) + "\n")
+            // buffer.append("AGE :" + res.getString(3) + "\n\n")
+            val stu = StudentModel(res.getString(0), res.getString(1), res.getString(2), res.getString(3))
+            studentsA.addStudent(stu)
+        }
+        val Nstudents = ArrayList<StudentModel>()
+        for (p in studentsA.getStudents()) {
+            Nstudents.add(p)
+        }
+        adaptador = StudentAdapter(Nstudents, this@MainActivity)
+        lista.adapter = adaptador
+    }
+
+    override fun onItemClick(student: StudentModel) {
+        nameTxt.setText(student.Name)
+        galaxyTxt.setText(student.Surname)
+        typeTxt.setText(student.Age)
+        idTxt.setText(student.ID)
+    }
+
+
 }

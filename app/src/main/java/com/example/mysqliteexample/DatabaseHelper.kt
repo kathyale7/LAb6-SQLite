@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase
  * based on the SQLiteHelper.
  */
 class DatabaseHelper(context: Context) :
-        SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+        SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
 
     /**
      * Our onCreate() method.
@@ -20,8 +20,8 @@ class DatabaseHelper(context: Context) :
      * should happen.
      */
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE $TABLE_NAME (ID INTEGER PRIMARY KEY " +
-                "AUTOINCREMENT,NAME TEXT,SURNAME TEXT,AGE TEXT)")
+        db.execSQL("CREATE TABLE $TABLE_NAME (ID TEXT PRIMARY KEY " +
+                ",NAME TEXT,SURNAME TEXT,AGE TEXT)")
     }
 
     /**
@@ -39,9 +39,10 @@ class DatabaseHelper(context: Context) :
      * Let's create our insertData() method.
      * It Will insert data to SQLIte database.
      */
-    fun insertData(name: String, surname: String, marks: String) {
+    fun insertData(id: String, name: String, surname: String, marks: String) {
         val db = this.writableDatabase
         val contentValues = ContentValues()
+        contentValues.put(COL_1, id)
         contentValues.put(COL_2, name)
         contentValues.put(COL_3, surname)
         contentValues.put(COL_4, marks)
@@ -80,6 +81,8 @@ class DatabaseHelper(context: Context) :
             val res = db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
             return res
         }
+
+
 
     fun searchData (id: String) :Cursor
     {

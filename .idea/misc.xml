@@ -8,12 +8,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.18518518518518517" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.18518518518518517" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/drawable/ic_student.xml" value="0.18518518518518517" />
         <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/activity_login.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/activity_ndrawer.xml" value="0.25" />
         <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/app_bar_ndrawer.xml" value="0.14583333333333334" />
         <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/content_ndrawer.xml" value="0.14583333333333334" />
         <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/fragment_slideshow.xml" value="0.14583333333333334" />
         <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/nav_header_ndrawer.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/templatestudent.xml" value="0.33" />
         <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/menu/activity_main_drawer.xml" value="0.20989583333333334" />
         <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/menu/n_drawer.xml" value="0.20989583333333334" />
       </map>
