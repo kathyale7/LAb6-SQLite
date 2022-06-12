@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -13,8 +14,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentTransaction
 import com.example.mysqliteexample.databinding.ActivityNdrawerBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,18 +26,21 @@ class NDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_ndrawer)
 
-        binding = ActivityNdrawerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        val bundle = intent.extras
 
-        setSupportActionBar(binding.appBarNdrawer.toolbar)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
-        binding.appBarNdrawer.fab.setOnClickListener { view ->
+        val fab: FloatingActionButton = findViewById(R.id.fab)
+        fab.setOnClickListener { view ->
+            Toast.makeText(this, "Dentro del botón flotante", Toast.LENGTH_SHORT).show()
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment_content_ndrawer)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -45,6 +51,7 @@ class NDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedList
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navView.setNavigationItemSelectedListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,10 +60,7 @@ class NDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_ndrawer)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
@@ -73,11 +77,23 @@ class NDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedList
             }
 
             R.id.nav_logout -> {
-                val i = Intent(this, MainActivity::class.java)
+                val i = Intent(this, Login::class.java)
                 finish()
                 startActivity(i)
             }
         }
         return true
+    }
+    override fun onBackPressed() {
+        val fragments = supportFragmentManager.backStackEntryCount
+        if (fragments == 1) {
+            finish()
+            return
+        }
+        super.onBackPressed()
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_content_ndrawer)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
