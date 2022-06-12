@@ -5,6 +5,19 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/activity_ndrawer.xml" value="0.25" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/app_bar_ndrawer.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/content_ndrawer.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/fragment_slideshow.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/layout/nav_header_ndrawer.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/menu/activity_main_drawer.xml" value="0.20989583333333334" />
+        <entry key="..\:/Users/ksand/OneDrive - Instituto Nacional de Aprendizaje/Documents/Universidad/I Semestre 2022/Plataformas moviles/LAb6/app/src/main/res/menu/n_drawer.xml" value="0.20989583333333334" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="jbr-11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

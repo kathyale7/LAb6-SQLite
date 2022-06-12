@@ -101,6 +101,12 @@ class DatabaseHelper(context: Context) :
         val COL_2 = "NAME"
         val COL_3 = "SURNAME"
         val COL_4 = "AGE"
+
+        val TABLE_NAME2 = "class_table"
+        val CLA_1 = "ID"
+        val CLA_2 = "DESCRIPTION"
+        val CLA_3 = "CREDIT"
+
     }
 }
 //end
