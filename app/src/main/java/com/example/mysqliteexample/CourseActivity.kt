@@ -17,24 +17,24 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener {
+class CourseActivity : AppCompatActivity(), CourseAdapter.onCourseClickListener {
 
     //In Kotlin `var` is used to declare a mutable variable. On the other hand
     //`internal` means a variable is visible within a given module.
     internal var dbHelper = DatabaseHelper(this)
-    var studentsA: StudentsA = StudentsA.instance
+    var courseA: CourseA = CourseA.instance
 
     lateinit var lista: RecyclerView
-    lateinit var adaptador:StudentAdapter
-    lateinit var student: StudentModel
-    var archived = ArrayList<StudentModel>()
+    lateinit var adaptador:CourseAdapter
+    lateinit var course: CourseModel
+    var archived = ArrayList<CourseModel>()
     var position: Int = 0
 
     /**
      * Let's create a function to show Toast message
      */
     fun showToast(text: String){
-        Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG).show()
+        Toast.makeText(this@CourseActivity, text, Toast.LENGTH_LONG).show()
     }
 
     /**
@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
     fun clearEditTexts(){
         nameTxt.setText("")
         surnameTxt.setText("")
-        typeTxt.setText("")
         idTxt.setText("")
     }
 
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_course)
 
         val searchIcon = findViewById<ImageView>(R.id.search_mag_icon)
         searchIcon.setColorFilter(Color.BLACK)
@@ -89,7 +88,7 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
                 return false
             }
         })
-        getListOfStudents()
+        getListOfCourses()
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
@@ -97,7 +96,7 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
                 val toPosition: Int = target.adapterPosition
 
 
-                Collections.swap(studentsA.getStudents(), fromPosition, toPosition)
+                Collections.swap(courseA.getCourses(), fromPosition, toPosition)
 
                 lista.adapter?.notifyItemMoved(fromPosition, toPosition)
 
@@ -109,21 +108,21 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
                 position = viewHolder.adapterPosition
 
                 if(direction == ItemTouchHelper.LEFT){
-                    student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
-                    studentsA.deleteStudent(position)
+                    course = CourseModel(courseA.getCourses()[position].ID, courseA.getCourses()[position].Descripcion, courseA.getCourses()[position].Creditos)
+                    courseA.deleteCourse(position)
                     lista.adapter?.notifyItemRemoved(position)
 
-                    Snackbar.make(lista, student.Name + " has been deleted.", Snackbar.LENGTH_LONG).setAction("Undo") {
-                        studentsA.getStudents().add(position, student)
+                    Snackbar.make(lista, course.Descripcion + " has been deleted.", Snackbar.LENGTH_LONG).setAction("Undo") {
+                        courseA.getCourses().add(position, course)
                         lista.adapter?.notifyItemInserted(position)
                     }.show()
-                    adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+                    adaptador = CourseAdapter(courseA.getCourses(), this@CourseActivity)
                     lista.adapter = adaptador
                 }else{
 
                     position = viewHolder.adapterPosition
-                    student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
-                    archived.add(student)
+                    course = CourseModel(courseA.getCourses()[position].ID, courseA.getCourses()[position].Descripcion, courseA.getCourses()[position].Creditos)
+                    archived.add(course)
 
 
 
@@ -137,12 +136,12 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
 
 
 
-                    Snackbar.make(lista, student.Name + " has been modified.", Snackbar.LENGTH_LONG).setAction("Undo") {
-                        archived.removeAt(archived.lastIndexOf(student))
-                        studentsA.getStudents().add(position, student)
+                    Snackbar.make(lista, course.Descripcion + " has been modified.", Snackbar.LENGTH_LONG).setAction("Undo") {
+                        archived.removeAt(archived.lastIndexOf(course))
+                        courseA.getCourses().add(position, course)
                         lista.adapter?.notifyItemInserted(position)
                     }.show()
-                    adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+                    adaptador = CourseAdapter(courseA.getCourses(), this@CourseActivity)
                     lista.adapter = adaptador
 
 
@@ -176,16 +175,14 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
     fun handleInserts() {
         insertBtn.setOnClickListener {
             try {
-                student = StudentModel(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString(),
-                    typeTxt.text.toString())
-                studentsA.addStudent(student)
-                archived.add(student)
+                course = CourseModel(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString())
+                courseA.addCourse(course)
+                archived.add(course)
                 lista.adapter?.notifyDataSetChanged()
-                adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+                adaptador = CourseAdapter(courseA.getCourses(), this@CourseActivity)
                 lista.adapter = adaptador
 
-                dbHelper.insertData(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString(),
-                    typeTxt.text.toString())
+                dbHelper.insertData2(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString())
                 clearEditTexts()
             }catch (e: Exception){
                 e.printStackTrace()
@@ -200,26 +197,24 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
     fun handleUpdates() {
         updateBtn.setOnClickListener {
             try {
-                val isUpdate = dbHelper.updateData(idTxt.text.toString(),
+                val isUpdate = dbHelper.updateData2(idTxt.text.toString(),
                     nameTxt.text.toString(),
-                    surnameTxt.text.toString(),
-                    typeTxt.text.toString())
+                    surnameTxt.text.toString())
 
             }catch (e: Exception){
                 e.printStackTrace()
                 showToast(e.message.toString())
             }
 
-             student = StudentModel(studentsA.getStudents()[position].ID,nameTxt.text.toString(),surnameTxt.text.toString(),
-                typeTxt.text.toString())
+             course = CourseModel(courseA.getCourses()[position].ID,nameTxt.text.toString(),surnameTxt.text.toString())
 
-            studentsA.editStudent(student, position)
-            Snackbar.make(lista, student.Name + " has been modified.", Snackbar.LENGTH_LONG).setAction("Undo") {
-                archived.removeAt(archived.lastIndexOf(student))
-                studentsA.getStudents().add(position, student)
+            courseA.editCourse(course, position)
+            Snackbar.make(lista, course.Descripcion + " has been modified.", Snackbar.LENGTH_LONG).setAction("Undo") {
+                archived.removeAt(archived.lastIndexOf(course))
+                courseA.getCourses().add(position, course)
                 lista.adapter?.notifyItemInserted(position)
             }.show()
-            adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+            adaptador = CourseAdapter(courseA.getCourses(), this@CourseActivity)
             lista.adapter = adaptador
             clearEditTexts()
         }
@@ -234,22 +229,22 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
 
             try {
 
-                dbHelper.deleteData(idTxt.text.toString())
+                dbHelper.deleteData2(idTxt.text.toString())
 
                 clearEditTexts()
             }catch (e: Exception){
                 e.printStackTrace()
                 showToast(e.message.toString())
             }
-            student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
-            studentsA.deleteStudent(position)
+            course = CourseModel(courseA.getCourses()[position].ID, courseA.getCourses()[position].Descripcion, courseA.getCourses()[position].Creditos)
+            courseA.deleteCourse(position)
             lista.adapter?.notifyItemRemoved(position)
 
-            Snackbar.make(lista, student.Name + " has been deleted.", Snackbar.LENGTH_LONG).setAction("Undo") {
-                studentsA.getStudents().add(position, student)
+            Snackbar.make(lista, course.Descripcion + " has been deleted.", Snackbar.LENGTH_LONG).setAction("Undo") {
+                courseA.getCourses().add(position, course)
                 lista.adapter?.notifyItemInserted(position)
             }.show()
-            adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+            adaptador = CourseAdapter(courseA.getCourses(), this@CourseActivity)
             lista.adapter = adaptador
         }
     }
@@ -279,8 +274,8 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
         //     }
     //  )
     }
-    private fun getListOfStudents() {
-        val res = dbHelper.allData
+    private fun getListOfCourses() {
+        val res = dbHelper.allData2
         if (res.count == 0) {
             showDialog("Error", "No Data Found")
         }
@@ -291,22 +286,21 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
             // buffer.append("NAME :" + res.getString(1) + "\n")
             // buffer.append("SURNAME :" + res.getString(2) + "\n")
             // buffer.append("AGE :" + res.getString(3) + "\n\n")
-            val stu = StudentModel(res.getString(0), res.getString(1), res.getString(2), res.getString(3))
-            studentsA.addStudent(stu)
+            val stu = CourseModel(res.getString(0), res.getString(1), res.getString(2))
+            courseA.addCourse(stu)
         }
-        val Nstudents = ArrayList<StudentModel>()
-        for (p in studentsA.getStudents()) {
+        val Nstudents = ArrayList<CourseModel>()
+        for (p in courseA.getCourses()) {
             Nstudents.add(p)
         }
-        adaptador = StudentAdapter(Nstudents, this@MainActivity)
+        adaptador = CourseAdapter(Nstudents, this@CourseActivity)
         lista.adapter = adaptador
     }
 
-    override fun onItemClick(student: StudentModel) {
-        nameTxt.setText(student.Name)
-        surnameTxt.setText(student.Surname)
-        typeTxt.setText(student.Age)
-        idTxt.setText(student.ID)
+    override fun onItemClick(course: CourseModel) {
+        nameTxt.setText(course.Descripcion)
+        surnameTxt.setText(course.Creditos)
+        idTxt.setText(course.ID)
     }
 
 

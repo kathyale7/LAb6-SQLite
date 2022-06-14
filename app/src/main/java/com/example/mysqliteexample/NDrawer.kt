@@ -72,7 +72,7 @@ class NDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedList
                 startActivity(i)
             }
             R.id.nav_classes-> {
-                val i = Intent(this, MainActivity::class.java)
+                val i = Intent(this, CourseActivity::class.java)
                 startActivity(i)
             }
 

@@ -45,11 +45,10 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:padding="5dp"
-                android:text="Name:"
+                android:text="Description:"
                 android:textColor="@color/teal_700"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold"/>
-
         <EditText
                 android:id="@+id/nameTxt"
                 android:layout_width="0dp"
@@ -57,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="Name" tools:ignore="TouchTargetSizeCheck"/>
+                android:hint="Description" tools:ignore="TouchTargetSizeCheck"/>
     </LinearLayout>
 
     <LinearLayout
@@ -71,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:padding="5dp"
-                android:text="Surname: "
+                android:text="Credits:"
                 android:textColor="@color/teal_700"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold"/>
@@ -83,34 +82,13 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="Surname" tools:ignore="TouchTargetSizeCheck"/>
+                android:hint="Credits" tools:ignore="TouchTargetSizeCheck"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:padding="5dp"
-                android:text="Age: "
-                android:textColor="@color/teal_700"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold"/>
-
-        <EditText
-                android:id="@+id/typeTxt"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textCapWords"
-                android:hint="Age" tools:ignore="TouchTargetSizeCheck"/>
-    </LinearLayout>
+        android:orientation="horizontal"/>
 
     <LinearLayout
         android:layout_width="match_parent"

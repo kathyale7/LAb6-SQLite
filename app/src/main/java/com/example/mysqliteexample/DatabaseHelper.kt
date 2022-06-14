@@ -20,8 +20,10 @@ class DatabaseHelper(context: Context) :
      * should happen.
      */
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE $TABLE_NAME (ID TEXT PRIMARY KEY " +
+        db.execSQL("CREATE TABLE $TABLE_NAME2 (ID TEXT PRIMARY KEY " +
                 ",NAME TEXT,SURNAME TEXT,AGE TEXT)")
+        db.execSQL("CREATE TABLE $TABLE_NAME (ID TEXT PRIMARY KEY " +
+                ",DESCRIPTION TEXT,CREDIT TEXT)")
     }
 
     /**
@@ -32,8 +34,11 @@ class DatabaseHelper(context: Context) :
      */
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME2)
         onCreate(db)
     }
+
+
 
     /**
      * Let's create our insertData() method.
@@ -47,6 +52,15 @@ class DatabaseHelper(context: Context) :
         contentValues.put(COL_3, surname)
         contentValues.put(COL_4, marks)
         db.insert(TABLE_NAME, null, contentValues)
+    }
+
+    fun insertData2(id: String, name: String, surname: String) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(CLA_1, id)
+        contentValues.put(CLA_2, name)
+        contentValues.put(CLA_3, surname)
+        db.insert(TABLE_NAME2, null, contentValues)
     }
 
     /**
@@ -64,12 +78,27 @@ class DatabaseHelper(context: Context) :
         return true
     }
 
+    fun updateData2(id: String, name: String, surname: String):
+            Boolean {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(CLA_1, id)
+        contentValues.put(CLA_2, name)
+        contentValues.put(CLA_3, surname)
+        db.update(TABLE_NAME2, contentValues, "ID = ?", arrayOf(id))
+        return true
+    }
+
     /**
      * Let's create a function to delete a given row based on the id.
      */
     fun deleteData(id : String) : Int {
         val db = this.writableDatabase
         return db.delete(TABLE_NAME,"ID = ?", arrayOf(id))
+    }
+    fun deleteData2(id : String) : Int {
+        val db = this.writableDatabase
+        return db.delete(TABLE_NAME2,"ID = ?", arrayOf(id))
     }
 
     /**
@@ -82,7 +111,12 @@ class DatabaseHelper(context: Context) :
             return res
         }
 
-
+    val allData2 : Cursor
+        get() {
+            val db = this.writableDatabase
+            val res = db.rawQuery("SELECT * FROM " + TABLE_NAME2, null)
+            return res
+        }
 
     fun searchData (id: String) :Cursor
     {
@@ -92,6 +126,13 @@ class DatabaseHelper(context: Context) :
         return res
     }
 
+    fun searchData2 (id: String) :Cursor
+    {
+        val db = this.writableDatabase
+        val querySearch = "SELECT * FROM " + TABLE_NAME2 + " WHERE ID = '"+id+"'"
+        val res = db.rawQuery(querySearch, null)
+        return res
+    }
     /**
      * Let's create a companion object to hold our static fields.
      * A Companion object is an object that is common to all instances of a given

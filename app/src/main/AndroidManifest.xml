@@ -13,6 +13,9 @@
                 android:name=".MainActivity"
                 android:exported="true"/>
         <activity
+                android:name=".CourseActivity"
+                android:exported="true"/>
+        <activity
                 android:name=".NDrawer"
                 android:exported="true"
                 android:label="@string/title_activity_ndrawer"
