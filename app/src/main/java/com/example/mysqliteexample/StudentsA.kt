@@ -3,6 +3,7 @@ package com.example.mysqliteexample
 class StudentsA private constructor() {
     private var students: ArrayList<StudentModel> = ArrayList<StudentModel>()
 
+
     fun addStudent(student: StudentModel){
         students?.add(student)
     }
@@ -31,6 +32,10 @@ class StudentsA private constructor() {
 
     fun deleteStudent(position: Int){
         students!!.removeAt(position)
+    }
+
+    fun deleteStudentAll(){
+        students!!.clear()
     }
 
     fun editStudent(p: StudentModel, position: Int){

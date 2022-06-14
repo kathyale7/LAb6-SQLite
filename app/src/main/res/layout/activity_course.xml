@@ -96,24 +96,43 @@
         android:orientation="horizontal">
 
         <Button
-                android:id="@+id/insertBtn"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Insert" app:cornerRadius="15sp" android:textAllCaps="false"/>
-
-        <Button
-                android:id="@+id/updateBtn"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Update" app:cornerRadius="15sp" android:textAllCaps="false"/>
-        <Button
                 android:id="@+id/deleteBtn"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Delete" app:cornerRadius="15sp" android:textAllCaps="false"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.769"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@android:drawable/ic_input_add"
+                    tools:ignore="SpeakableTextPresentCheck,DuplicateClickableBoundsCheck"
+                    app:backgroundTintMode="add" android:background="@color/teal_700"
+                    app:backgroundTint="@color/purple_500"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/update2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.954"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@android:drawable/ic_popup_sync" tools:ignore="SpeakableTextPresentCheck"
+                    app:backgroundTintMode="add" android:background="@color/teal_700"
+                    app:backgroundTint="@color/purple_500"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
     <androidx.appcompat.widget.SearchView
@@ -122,7 +141,8 @@
             android:layout_height="wrap_content"
             android:textCursorDrawable="@null"
             app:iconifiedByDefault="false"
-            app:queryBackground="@null"/>
+            app:queryBackground="@null">
+    </androidx.appcompat.widget.SearchView>
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lista"
             android:layout_height="442dp"

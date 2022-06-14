@@ -12,8 +12,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_course.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.idTxt
+
+import kotlinx.android.synthetic.main.activity_main.nameTxt
+import kotlinx.android.synthetic.main.activity_main.surnameTxt
+import kotlinx.android.synthetic.main.activity_main.updateBtn
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -108,6 +115,15 @@ class CourseActivity : AppCompatActivity(), CourseAdapter.onCourseClickListener 
                 position = viewHolder.adapterPosition
 
                 if(direction == ItemTouchHelper.LEFT){
+                    try {
+
+                        dbHelper.deleteData2(courseA.getCourses()[position].ID)
+
+                    }catch (e: Exception){
+                        e.printStackTrace()
+                        showToast(e.message.toString())
+                    }
+
                     course = CourseModel(courseA.getCourses()[position].ID, courseA.getCourses()[position].Descripcion, courseA.getCourses()[position].Creditos)
                     courseA.deleteCourse(position)
                     lista.adapter?.notifyItemRemoved(position)
@@ -162,10 +178,67 @@ class CourseActivity : AppCompatActivity(), CourseAdapter.onCourseClickListener 
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(lista)
 
+        val add: FloatingActionButton = findViewById(R.id.add3)
+        add.setOnClickListener { view ->
+            Toast.makeText(this, " ", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Course inserted.", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+
+
+            try {
+                course = CourseModel(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString())
+                courseA.addCourse(course)
+                archived.add(course)
+                dbHelper.insertData2(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString())
+                clearEditTexts()
+            }catch (e: Exception){
+                e.printStackTrace()
+                showToast(e.message.toString())
+            }
+
+
+            lista.adapter?.notifyDataSetChanged()
+            adaptador = CourseAdapter(courseA.getCourses(), this@CourseActivity)
+            lista.adapter = adaptador
+
+//
+
+
+        }
+
+        val update: FloatingActionButton = findViewById(R.id.update2)
+        update.setOnClickListener { view ->
+            Toast.makeText(this, " ", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Student updated.", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+
+
+            try {
+                val isUpdate = dbHelper.updateData2(idTxt.text.toString(),
+                    nameTxt.text.toString(),
+                    surnameTxt.text.toString())
+
+            }catch (e: Exception){
+                e.printStackTrace()
+                showToast(e.message.toString())
+            }
+            course = CourseModel(courseA.getCourses()[position].ID,nameTxt.text.toString(),surnameTxt.text.toString())
+
+            courseA.editCourse(course, position)
+            clearEditTexts()
+            lista.adapter?.notifyDataSetChanged()
+            adaptador = CourseAdapter(courseA.getCourses(), this@CourseActivity)
+            lista.adapter = adaptador
+
+//
+
+
+        }
+
 
         handleInserts()
         handleUpdates()
-        handleDeletes()
+      //  handleDeletes()
 
     }
 
@@ -173,7 +246,7 @@ class CourseActivity : AppCompatActivity(), CourseAdapter.onCourseClickListener 
      * When our handleInserts button is clicked.
      */
     fun handleInserts() {
-        insertBtn.setOnClickListener {
+/** insertBtn.setOnClickListener {
             try {
                 course = CourseModel(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString())
                 courseA.addCourse(course)
@@ -188,14 +261,14 @@ class CourseActivity : AppCompatActivity(), CourseAdapter.onCourseClickListener 
                 e.printStackTrace()
                 showToast(e.message.toString())
             }
-        }
+        }  */
     }
 
     /**
      * When our handleUpdates data button is clicked
      */
     fun handleUpdates() {
-        updateBtn.setOnClickListener {
+/**   updateBtn.setOnClickListener {
             try {
                 val isUpdate = dbHelper.updateData2(idTxt.text.toString(),
                     nameTxt.text.toString(),
@@ -217,14 +290,14 @@ class CourseActivity : AppCompatActivity(), CourseAdapter.onCourseClickListener 
             adaptador = CourseAdapter(courseA.getCourses(), this@CourseActivity)
             lista.adapter = adaptador
             clearEditTexts()
-        }
+        } */
     }
 
     /**
      * When our handleDeletes button is clicked
      */
     fun handleDeletes(){
-        deleteBtn.setOnClickListener {
+/**   deleteBtn.setOnClickListener {
 
 
             try {
@@ -246,7 +319,7 @@ class CourseActivity : AppCompatActivity(), CourseAdapter.onCourseClickListener 
             }.show()
             adaptador = CourseAdapter(courseA.getCourses(), this@CourseActivity)
             lista.adapter = adaptador
-        }
+        } */
     }
 
     /**

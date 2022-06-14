@@ -1,6 +1,7 @@
 package com.example.mysqliteexample
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
@@ -9,10 +10,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -109,6 +113,15 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
                 position = viewHolder.adapterPosition
 
                 if(direction == ItemTouchHelper.LEFT){
+                    try {
+
+                        dbHelper.deleteData(studentsA.getStudents()[position].ID)
+                        showToast("Deleted")
+                    }catch (e: Exception){
+                        e.printStackTrace()
+                        showToast(e.message.toString())
+                    }
+
                     student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
                     studentsA.deleteStudent(position)
                     lista.adapter?.notifyItemRemoved(position)
@@ -125,14 +138,10 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
                     student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
                     archived.add(student)
 
-
-
-                   // val i= Intent(this@CrudPersonas, ModificarExample::class.java)
-                    //  i.putExtra("puser", personas.getPersonas()[position].user)
-                    //  i.putExtra("ppass", personas.getPersonas()[position].password)
-                    //  i.putExtra("pname", personas.getPersonas()[position].nombre)
-                    //  i.putExtra("poss", position)
-                    //  startActivity(i)
+                    nameTxt.setText(studentsA.getStudents()[position].Name)
+                    surnameTxt.setText(studentsA.getStudents()[position].Surname)
+                    typeTxt.setText(studentsA.getStudents()[position].Age)
+                    idTxt.setText(studentsA.getStudents()[position].ID)
 
 
 
@@ -163,10 +172,70 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(lista)
 
+        val add: FloatingActionButton = findViewById(R.id.add2)
+        add.setOnClickListener { view ->
+            Toast.makeText(this, " ", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Student inserted.", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
 
-        handleInserts()
-        handleUpdates()
-        handleDeletes()
+
+            try {
+                student = StudentModel(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString(),
+                    typeTxt.text.toString())
+                studentsA.addStudent(student)
+                archived.add(student)
+                dbHelper.insertData(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString(),
+                    typeTxt.text.toString())
+                clearEditTexts()
+            }catch (e: Exception){
+                e.printStackTrace()
+                showToast(e.message.toString())
+            }
+
+
+            lista.adapter?.notifyDataSetChanged()
+            adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+            lista.adapter = adaptador
+
+//
+
+
+        }
+
+        val update: FloatingActionButton = findViewById(R.id.update1)
+        update.setOnClickListener { view ->
+            Toast.makeText(this, " ", Toast.LENGTH_SHORT).show()
+            Snackbar.make(view, "Student updated.", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+
+
+            try {
+                val isUpdate = dbHelper.updateData(idTxt.text.toString(),
+                    nameTxt.text.toString(),
+                    surnameTxt.text.toString(),
+                    typeTxt.text.toString())
+
+            }catch (e: Exception){
+                e.printStackTrace()
+                showToast(e.message.toString())
+            }
+            student = StudentModel(studentsA.getStudents()[position].ID,nameTxt.text.toString(),surnameTxt.text.toString(), typeTxt.text.toString())
+
+            studentsA.editStudent(student, position)
+            clearEditTexts()
+            lista.adapter?.notifyDataSetChanged()
+            adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+            lista.adapter = adaptador
+
+//
+
+
+        }
+
+
+       // handleInserts()
+        //handleUpdates()
+        //handleDeletes()
 
     }
 
@@ -174,7 +243,7 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
      * When our handleInserts button is clicked.
      */
     fun handleInserts() {
-        insertBtn.setOnClickListener {
+/**   insertBtn.setOnClickListener {
             try {
                 student = StudentModel(idTxt.text.toString(),nameTxt.text.toString(),surnameTxt.text.toString(),
                     typeTxt.text.toString())
@@ -191,14 +260,14 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
                 e.printStackTrace()
                 showToast(e.message.toString())
             }
-        }
+        }  */
     }
 
     /**
      * When our handleUpdates data button is clicked
      */
     fun handleUpdates() {
-        updateBtn.setOnClickListener {
+/**  updateBtn.setOnClickListener {
             try {
                 val isUpdate = dbHelper.updateData(idTxt.text.toString(),
                     nameTxt.text.toString(),
@@ -222,36 +291,36 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
             adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
             lista.adapter = adaptador
             clearEditTexts()
-        }
+        }  */
     }
 
     /**
      * When our handleDeletes button is clicked
      */
     fun handleDeletes(){
-        deleteBtn.setOnClickListener {
+        // deleteBtn.setOnClickListener {
 
 
-            try {
+        //     try {
 
-                dbHelper.deleteData(idTxt.text.toString())
+        //         dbHelper.deleteData(idTxt.text.toString())
 
-                clearEditTexts()
-            }catch (e: Exception){
-                e.printStackTrace()
-                showToast(e.message.toString())
-            }
-            student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
-            studentsA.deleteStudent(position)
-            lista.adapter?.notifyItemRemoved(position)
-
-            Snackbar.make(lista, student.Name + " has been deleted.", Snackbar.LENGTH_LONG).setAction("Undo") {
-                studentsA.getStudents().add(position, student)
-                lista.adapter?.notifyItemInserted(position)
-            }.show()
-            adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
-            lista.adapter = adaptador
-        }
+        //         clearEditTexts()
+        //     }catch (e: Exception){
+        //         e.printStackTrace()
+        //         showToast(e.message.toString())
+        //     }
+        //     student = StudentModel(studentsA.getStudents()[position].ID, studentsA.getStudents()[position].Name, studentsA.getStudents()[position].Surname, studentsA.getStudents()[position].Age)
+        //     studentsA.deleteStudent(position)
+        //     lista.adapter?.notifyItemRemoved(position)
+        //
+        //     Snackbar.make(lista, student.Name + " has been deleted.", Snackbar.LENGTH_LONG).setAction("Undo") {
+                //         studentsA.getStudents().add(position, student)
+        //        lista.adapter?.notifyItemInserted(position)
+        //    }.show()
+        //    adaptador = StudentAdapter(studentsA.getStudents(), this@MainActivity)
+        //    lista.adapter = adaptador
+        //  }
     }
 
     /**
@@ -281,16 +350,16 @@ class MainActivity : AppCompatActivity(), StudentAdapter.onStudentClickListener 
     }
     private fun getListOfStudents() {
         val res = dbHelper.allData
+
         if (res.count == 0) {
             showDialog("Error", "No Data Found")
         }
 
         //val buffer = StringBuffer()
         while (res.moveToNext()) {
-           // buffer.append("ID :" + res.getString(0) + "\n")
-            // buffer.append("NAME :" + res.getString(1) + "\n")
-            // buffer.append("SURNAME :" + res.getString(2) + "\n")
-            // buffer.append("AGE :" + res.getString(3) + "\n\n")
+
+
+
             val stu = StudentModel(res.getString(0), res.getString(1), res.getString(2), res.getString(3))
             studentsA.addStudent(stu)
         }

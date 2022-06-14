@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase
  * based on the SQLiteHelper.
  */
 class DatabaseHelper(context: Context) :
-        SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
+        SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
     /**
      * Our onCreate() method.
@@ -20,10 +20,13 @@ class DatabaseHelper(context: Context) :
      * should happen.
      */
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE $TABLE_NAME2 (ID TEXT PRIMARY KEY " +
-                ",NAME TEXT,SURNAME TEXT,AGE TEXT)")
         db.execSQL("CREATE TABLE $TABLE_NAME (ID TEXT PRIMARY KEY " +
+                ",NAME TEXT,SURNAME TEXT,AGE TEXT)")
+        db.execSQL("CREATE TABLE $TABLE_NAME2 (ID TEXT PRIMARY KEY " +
                 ",DESCRIPTION TEXT,CREDIT TEXT)")
+        db.execSQL("CREATE TABLE $TABLE_NAME3 (user TEXT PRIMARY KEY " +
+                ",password TEXT)")
+
     }
 
     /**
@@ -35,6 +38,8 @@ class DatabaseHelper(context: Context) :
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME2)
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME3)
+
         onCreate(db)
     }
 
@@ -61,6 +66,14 @@ class DatabaseHelper(context: Context) :
         contentValues.put(CLA_2, name)
         contentValues.put(CLA_3, surname)
         db.insert(TABLE_NAME2, null, contentValues)
+    }
+
+    fun insertData3(id: String, password: String) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(USE_1, id)
+        contentValues.put(USE_2, password)
+        db.insert(TABLE_NAME3, null, contentValues)
     }
 
     /**
@@ -139,7 +152,7 @@ class DatabaseHelper(context: Context) :
      * class.
      */
     companion object {
-        val DATABASE_NAME = "students.db"
+        val DATABASE_NAME = "students2.db"
         val TABLE_NAME = "student_table"
         val COL_1 = "ID"
         val COL_2 = "NAME"
@@ -150,6 +163,14 @@ class DatabaseHelper(context: Context) :
         val CLA_1 = "ID"
         val CLA_2 = "DESCRIPTION"
         val CLA_3 = "CREDIT"
+
+        val TABLE_NAME3= "user_table"
+        val USE_1 = "user"
+        val USE_2 = "password"
+
+        val TABLE_NAME4= "course_student_table"
+        val sc_1 = "STUDENT_ID"
+        val sc_2 = "COURSE_ID"
 
     }
 }
