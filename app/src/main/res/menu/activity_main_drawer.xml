@@ -12,6 +12,8 @@
                 android:id="@+id/nav_classes"
                 android:icon="@drawable/ic_i_training_class"
                 android:title="Classes"/>
+        <item android:title="Enroll" android:id="@+id/nav_enroll" android:icon="@drawable/ic_form_new_28_regular"/>
+        <item android:title="Enrollements" android:icon="@drawable/catalog" android:id="@+id/nav_enrolls"/>
     </group>
     <group
     >

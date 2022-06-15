@@ -17,26 +17,27 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="0"
-            app:srcCompat="@drawable/ic_i_training_class" android:tint="@color/teal_700"/>
+            app:srcCompat="@drawable/catalog" android:tint="@color/teal_700"/>
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="315dp"
             android:layout_height="match_parent" android:layout_weight="0">
         <TextView
-                android:id="@+id/tvName"
+                android:id="@+id/tvStudent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="63dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:text="TextView" android:textSize="16sp" android:fontFamily="@font/poppins_medium"/>
         <TextView
-                android:id="@+id/tvSurname"
+                android:id="@+id/tvCourse"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="43dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0"
                 android:text="TextView" android:textSize="16sp" android:fontFamily="@font/poppins_medium"/>
+
     </LinearLayout>
 
 

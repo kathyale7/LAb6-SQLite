@@ -6,5 +6,112 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".StudentUpdate">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+                android:layout_width="421dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+            <TextView
+                    android:id="@+id/nameLabel"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:text="Student ID"
+                    android:textColor="@color/teal_700"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="bold"/>
+
+            <EditText
+                    android:id="@+id/StudentIDTxt"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:hint="Student ID"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:text="Course ID"
+                    android:textColor="@color/teal_700"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="bold"/>
+
+            <EditText
+                    android:id="@+id/CourseIDTxt"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:hint="Course ID" tools:ignore="TouchTargetSizeCheck"/>
+        </LinearLayout>
+        <androidx.appcompat.widget.SearchView
+                android:id="@+id/person_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textCursorDrawable="@null"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@null">
+        </androidx.appcompat.widget.SearchView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.769"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@android:drawable/ic_input_add"
+                    tools:ignore="SpeakableTextPresentCheck,DuplicateClickableBoundsCheck"
+                    app:backgroundTintMode="add" android:background="@color/teal_700"
+                    app:backgroundTint="@color/purple_500"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/update5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.954"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@android:drawable/ic_popup_sync" tools:ignore="SpeakableTextPresentCheck"
+                    app:backgroundTintMode="add" android:background="@color/teal_700"
+                    app:backgroundTint="@color/purple_500"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="413dp"
+                android:layout_height="666dp">
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="191dp"
+                    android:layout_height="match_parent" android:id="@+id/lista_student"/>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/lista_course">
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

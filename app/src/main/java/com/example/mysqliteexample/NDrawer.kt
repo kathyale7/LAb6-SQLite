@@ -81,6 +81,18 @@ class NDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedList
                 finish()
                 startActivity(i)
             }
+
+            R.id.nav_enroll -> {
+                val i = Intent(this, StudentUpdate::class.java)
+
+                startActivity(i)
+            }
+
+            R.id.nav_enrolls -> {
+                val i = Intent(this, StudentCourse::class.java)
+
+                startActivity(i)
+            }
         }
         return true
     }

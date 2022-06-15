@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase
  * based on the SQLiteHelper.
  */
 class DatabaseHelper(context: Context) :
-        SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+        SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
 
     /**
      * Our onCreate() method.
@@ -20,12 +20,18 @@ class DatabaseHelper(context: Context) :
      * should happen.
      */
     override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL("PRAGMA foreign_keys = ON")
         db.execSQL("CREATE TABLE $TABLE_NAME (ID TEXT PRIMARY KEY " +
                 ",NAME TEXT,SURNAME TEXT,AGE TEXT)")
         db.execSQL("CREATE TABLE $TABLE_NAME2 (ID TEXT PRIMARY KEY " +
                 ",DESCRIPTION TEXT,CREDIT TEXT)")
         db.execSQL("CREATE TABLE $TABLE_NAME3 (user TEXT PRIMARY KEY " +
                 ",password TEXT)")
+        db.execSQL("CREATE TABLE $TABLE_NAME4 (STUDENT_ID TEXT,COURSE_ID TEXT " +
+                ",FOREIGN KEY(STUDENT_ID) REFERENCES student_table(ID) "+
+                ",FOREIGN KEY(COURSE_ID) REFERENCES class_table(ID))")
+        /*db.execSQL("CREATE TABLE $TABLE_NAME4 (ID INTEGER PRIMARY KEY " +
+                "AUTOINCREMENT,STUDENT_ID TEXT,COURSE_ID TEXT)")*/
 
     }
 
@@ -36,9 +42,11 @@ class DatabaseHelper(context: Context) :
      * to upgrade to the new schema version.
      */
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME2)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME3)
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME4)
 
         onCreate(db)
     }
@@ -74,6 +82,14 @@ class DatabaseHelper(context: Context) :
         contentValues.put(USE_1, id)
         contentValues.put(USE_2, password)
         db.insert(TABLE_NAME3, null, contentValues)
+    }
+
+    fun insertData4(id_stu: String, id_cou: String) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(sc_1, id_stu)
+        contentValues.put(sc_2, id_cou)
+        db.insert(TABLE_NAME4, null, contentValues)
     }
 
     /**
@@ -114,6 +130,11 @@ class DatabaseHelper(context: Context) :
         return db.delete(TABLE_NAME2,"ID = ?", arrayOf(id))
     }
 
+    fun deleteData3(id : String) : Int {
+        val db = this.writableDatabase
+        return db.delete(TABLE_NAME4,"STUDENT_ID = ?", arrayOf(id))
+    }
+
     /**
      * The below getter property will return a Cursor containing our dataset.
      */
@@ -128,6 +149,13 @@ class DatabaseHelper(context: Context) :
         get() {
             val db = this.writableDatabase
             val res = db.rawQuery("SELECT * FROM " + TABLE_NAME2, null)
+            return res
+        }
+
+    val allData3 : Cursor
+        get() {
+            val db = this.writableDatabase
+            val res = db.rawQuery("SELECT * FROM " + TABLE_NAME4, null)
             return res
         }
 
